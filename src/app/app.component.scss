@@ -1,0 +1,37 @@
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+  font-size: 16px;
+}
+.header{
+  position: relative;
+}
+.logo-box{
+    position:absolute;
+    top: 40px;
+    left:40px
+}
+.logo{
+height: 35px;
+}
+
+// .grid {
+//   display: flex;
+//   flex-wrap: wrap;
+//   justify-content: space-between;
+//   align-items: center;
+//   height: 100vh; /* Set the grid height to cover the full screen */
+// }
+
+// .item {
+//   flex-basis: calc(33.33% - 20px);
+//   box-sizing: border-box; /* Include padding and border in the box sizing */
+//   height: 100px; /* Adjust the height as needed */
+//   background-color: lightgray;
+//   border: 1px solid gray;
+//   margin: 10px;
+// }
+
+

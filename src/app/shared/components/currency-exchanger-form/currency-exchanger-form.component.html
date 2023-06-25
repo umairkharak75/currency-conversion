@@ -1,0 +1,83 @@
+
+<div class="main-container">
+  <form class="convert-container" [formGroup]="currencyConversionFrom">
+    <mat-form-field class="amount-field">
+      <mat-label>Enter Amount</mat-label>
+      <input formControlName="amount" type="number" matInput value="0" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>From</mat-label>
+      <mat-select
+        [compareWith]="compareFn"
+        name="from"
+        required
+        formControlName="from"
+      >
+        <mat-option *ngFor="let curr of currenciyList" [value]="curr">
+          {{ curr.code }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <button
+      matPrefix
+      mat-icon-button
+      color="primary"
+      disabled="{{ amount.value && from.value && to.value && !currencyExchangeDetails ? false : true }}"
+      (click)="calcualteRates()"
+    >
+      <mat-icon>swap_horiz</mat-icon>
+    </button>
+
+    <mat-form-field>
+      <mat-label>To</mat-label>
+      <mat-select
+        [compareWith]="compareFn"
+        name="to"
+        required
+        formControlName="to"
+      >
+        <mat-option *ngFor="let curr of currenciyList" [value]="curr">
+          {{ curr.code }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
+
+  <div class="action-container">
+    <button
+      class="convert-btn"
+      mat-raised-button
+      color="primary"
+      disabled="{{ amount.value && from.value && to.value ? false : true }}"
+      (click)="calcualteRates()"
+    >
+      Convert
+    </button>
+  </div>
+
+  <div class="result-container">
+    <h2 class="quotation-result">
+      {{ quotationResult }}
+    </h2>
+
+    <h2 class="conversion-result">
+      {{ currencyConversionResult?.result | number : "1.2-2"
+      }}{{ currencyConversionResult?.query?.to }}
+    </h2>
+
+    <button
+      disabled="{{ amount.value && from.value && to.value  ? false : true }}"
+      *ngIf="!currencyExchangeDetails"
+      mat-raised-button
+      color="primary"
+      (click)="goToDeatilPage()"
+    >
+      More Details
+    </button>
+  </div>
+
+
+</div>
+
+

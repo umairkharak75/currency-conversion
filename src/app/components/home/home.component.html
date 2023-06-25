@@ -1,0 +1,14 @@
+<h1>Currency Exchanger</h1>
+<app-currency-exchanger-form (topCurrencyResultEmitter)="conversionWithTopCurriences($event)"></app-currency-exchanger-form>
+   <div  class="popular-container">
+    <div class="currency-items"*ngFor="let convertedResults of topCurrenciesResult">
+
+      <h2>
+
+          {{ convertedResults?.query?.amount }} {{ convertedResults.query.from }} =
+        {{ convertedResults?.result }} {{ convertedResults.query.to }}
+
+      </h2>
+    </div>
+   </div>
+

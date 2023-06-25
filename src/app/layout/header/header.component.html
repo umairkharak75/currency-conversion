@@ -1,0 +1,14 @@
+<mat-toolbar class="header">
+  <div class="header__logo-box">
+      <img src="../../../assets/logo-green-1x.png"  class="header__img"alt="">
+  </div>
+  <div class="header__detail-box">
+    <button class="header__detail-button" mat-raised-button  (click)="goToDeatilPage('EUR','USD')" >
+      EUR-USD Details
+    </button>
+    <button (click)="goToDeatilPage('EUR','GBP')" class="header__detail-button" mat-raised-button  >
+      EUR-GBP Details
+    </button>
+  </div>
+
+</mat-toolbar>
