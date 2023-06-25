@@ -5,8 +5,8 @@
 <h1>{{currencyExchangeDetails.from.code}} - {{currencyExchangeDetails.from.name}}</h1>
 <app-currency-exchanger-form [currencyExchangeDetails]="currencyExchangeDetails"></app-currency-exchanger-form>
 
-<div style="display: block;">
-  <canvas baseChart width="400" height="400"
+<div class="chart">
+  <canvas baseChart width="790" height="400"
     [type]="'line'"
     [data]="lineChartData"
     [options]="lineChartOptions"

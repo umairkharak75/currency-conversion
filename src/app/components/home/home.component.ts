@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component } from '@angular/core';
 import { CurrencyConversionService } from 'src/app/services/currency-conversion.service';
-import { ICurrency, ICurrencyConversion } from 'src/app/shared/models/currency';
+import {  ICurrencyConversion } from 'src/app/shared/models/currency';
 
 @Component({
   selector: 'app-home',

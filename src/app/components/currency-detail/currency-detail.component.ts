@@ -1,56 +1,99 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ChartConfiguration, ChartOptions } from "chart.js";
-import {  map } from 'rxjs';
+import { ChartConfiguration, ChartOptions } from 'chart.js';
+import * as moment from 'moment';
+import { map } from 'rxjs';
 import { CurrencyConversionService } from 'src/app/services/currency-conversion.service';
+import { DATES, MONTH_LABELS } from 'src/app/shared/constant/constant';
 import { ICurrencyConversionDetail } from 'src/app/shared/models/currency';
 
 @Component({
   selector: 'app-currency-detail',
   templateUrl: './currency-detail.component.html',
-  styleUrls: ['./currency-detail.component.scss']
+  styleUrls: ['./currency-detail.component.scss'],
 })
 export class CurrencyDetailComponent {
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  lastYearData!: Object;
+  graphDates: any = [];
   currencyExchangeDetails!: ICurrencyConversionDetail;
-  constructor(public currencyConversion:CurrencyConversionService, public route: ActivatedRoute,public router:Router){
-    this.route.paramMap
-    .pipe(map(() => window.history.state)).subscribe(res=>{
-
-          this.currencyExchangeDetails=res
-         console.log(res)
-     })
-}
 
   public lineChartOptions: ChartOptions<'line'> = {
-    responsive: false
+    responsive: false,
   };
   public lineChartLegend = true;
 
-  public lineChartData: ChartConfiguration<'line'>['data'] = {
-    labels: [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July'
-    ],
-    datasets: [
-      {
-        data: [ 65, 59, 80, 81, 56, 55, 40 ],
-        label: 'Series A',
-        fill: true,
-        tension: 0.5,
-        borderColor: 'black',
-        backgroundColor: 'rgba(255,0,0,0.3)'
-      }
-    ]
-  };
+  public lineChartData!: ChartConfiguration<'line'>['data'];
 
-  navigateTohome():void{
-    this.router.navigateByUrl('/');
-
+  lastDayOfMonths: string[] = [];
+  constructor(
+    public currencyConversion: CurrencyConversionService,
+    public route: ActivatedRoute,
+    public router: Router
+  ) {
+    this.getLastDay();
+    this.route.paramMap
+      .pipe(map(() => window.history.state))
+      .subscribe((res) => {
+        this.currencyExchangeDetails = res;
+        this.getLastYearRates();
+      });
   }
 
+  navigateTohome(): void {
+    this.router.navigateByUrl('/');
+  }
+  getLastDay() {
+    for (let i = 0; i < 12; i++) {
+      const d = new Date(2022, i + 1, 0);
+      this.lastDayOfMonths.push(moment(d).format('YYYY-MM-DD'));
+    }
+  }
+
+  getLastYearRates() {
+    this.currencyConversion
+      .getLastYearRates(
+        DATES.startData,
+        DATES.endDate,
+        this.currencyExchangeDetails.from.code,
+        this.currencyExchangeDetails.to.code
+      )
+      .subscribe((data) => {
+        this.lastYearData = data.quotes;
+        const quotesArray = Object.entries(this.lastYearData).map(
+          ([date, rates]) => ({
+            date,
+            ...rates,
+          })
+        );
+        this.lastDayOfMonths.forEach((element: string) => {
+          const result = this.findObjectByDate(quotesArray, element);
+          this.graphDates.push(result);
+        });
+        const values = this.graphDates.map((obj:any) => Object.values(obj)[1]);
+
+
+        console.log(values)
+        this.initializeChart(values);
+      });
+  }
+  findObjectByDate(quotesArray: any, targetDate: string) {
+    return quotesArray.find((obj: { date: string }) => obj.date === targetDate);
+  }
+  initializeChart(value: number[]) {
+    this.lineChartData = {
+      labels: MONTH_LABELS,
+      datasets: [
+        {
+          data: value,
+          label: 'Series A',
+          fill: true,
+          tension: 0.6,
+          borderColor: 'black',
+          backgroundColor: 'rgba(255,0,0,0.3)',
+        },
+      ],
+    };
+  }
 }

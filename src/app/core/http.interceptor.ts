@@ -11,7 +11,7 @@ export class HttpCallInterceptor implements HttpInterceptor {
       url:environment.apiUrl+request.url,
       setHeaders: {
         'Content-Type': 'application/json',
-        'apikey':'gA5d8jY84OfcCfFJsrWrBJwBQeGQvxaq'
+        'apikey':environment.apiKey
       },
     });
 
