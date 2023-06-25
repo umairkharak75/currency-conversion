@@ -46,8 +46,7 @@ export class CurrencyConversionService {
     }
 
     getLastYearRates(startDate:string,endDate:string,source:string,currency:string){
-      const url=  `currency_data/timeframe?start_date=${startDate}&end_date=${endDate}&currencies=${currency} &source=${source}`
-
+      const url=URL.currencyHistory(startDate,endDate,currency,source)
       return this.httpService.get(url)
     }
 

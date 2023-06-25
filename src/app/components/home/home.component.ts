@@ -14,7 +14,6 @@ export class HomeComponent {
   }
   topCurrenciesResult!: ICurrencyConversion[];
 conversionWithTopCurriences(event:any) {
-  console.log(event)
   this.currencyConvertor
     .conversionWithMostPopularCurrencies(
       event.TopCurrencies,

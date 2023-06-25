@@ -51,7 +51,6 @@ export class CurrencyExchangerFormComponent implements OnInit {
         .fetchCurrenciesList(URL.fetchCurrencyList)
         .subscribe((fechtedCurrencies: ICurrency[]) => {
           (this.currenciyList = fechtedCurrencies),
-          console.log(this.currenciyList)
             this.currencyConvertor.saveCurrencyListToLocalStorage(
               this.currenciyList
             );

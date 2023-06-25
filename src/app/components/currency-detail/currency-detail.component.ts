@@ -74,7 +74,6 @@ export class CurrencyDetailComponent {
         const values = this.graphDates.map((obj:any) => Object.values(obj)[1]);
 
 
-        console.log(values)
         this.initializeChart(values);
       });
   }
