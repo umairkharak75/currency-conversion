@@ -2,6 +2,7 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnDestroy,
   OnInit,
   Output,
   ViewEncapsulation,
@@ -20,6 +21,7 @@ import {
   ICurrencyConversionDetail,
 } from '../../models/currency';
 import { URL } from '../../constant/constant';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-currency-exchanger-form',
@@ -27,9 +29,10 @@ import { URL } from '../../constant/constant';
   styleUrls: ['./currency-exchanger-form.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class CurrencyExchangerFormComponent implements OnInit {
+export class CurrencyExchangerFormComponent implements OnInit ,OnDestroy{
   currenciyList: ICurrency[] = [];
   title = 'currency-convertor';
+  subscription: Subscription=new Subscription()
   fromCurrency!:string;
   currencyConversionResult: ICurrencyConversion | undefined;
   currencyConversionFrom!: FormGroup;
@@ -47,7 +50,7 @@ export class CurrencyExchangerFormComponent implements OnInit {
     public router: Router
   ) {
     if (!this.currencyConvertor.getCurrencyListFromLocalStorage()) {
-      this.currencyConvertor
+      this.subscription.add(this.currencyConvertor
         .fetchCurrenciesList(URL.fetchCurrencyList)
         .subscribe((fechtedCurrencies: ICurrency[]) => {
           (this.currenciyList = fechtedCurrencies),
@@ -56,7 +59,7 @@ export class CurrencyExchangerFormComponent implements OnInit {
             );
 
           this.TopCurrencies = this.currenciyList.slice(0, 9);
-        });
+        }));
     }else{
       this.currenciyList=this.currencyConvertor.getCurrencyListFromLocalStorage()
       this.TopCurrencies = this.currenciyList.slice(0, 9);
@@ -85,7 +88,7 @@ export class CurrencyExchangerFormComponent implements OnInit {
     this.currencyConversionResult =
       this.currencyExchangeDetails?.currencyConversionResult;
 
-    this.amount.valueChanges.subscribe((val) => {
+    this.subscription.add(this.amount.valueChanges.subscribe((val) => {
       if (val) {
         if (this.currencyExchangeDetails) {
           this.to.enable();
@@ -97,7 +100,7 @@ export class CurrencyExchangerFormComponent implements OnInit {
         this.to.disable();
         this.from.disable();
       }
-    });
+    }))
   }
   compareFn(o1: ICurrency, o2: ICurrency): boolean {
     if (o1.code === o2.code) return true;
@@ -110,7 +113,7 @@ export class CurrencyExchangerFormComponent implements OnInit {
       this.currencyConversionFrom.value.from.code,
       this.currencyConversionFrom.value.amount
     );
-    this.currencyConvertor.convertRateCurrency(url).subscribe((response) => {
+    this.subscription.add(this.currencyConvertor.convertRateCurrency(url).subscribe((response) => {
       this.currencyConversionResult = response;
       this.calculateQuotation();
       this.fromCurrency = this.currencyConversionFrom.value.to.code;
@@ -120,7 +123,7 @@ export class CurrencyExchangerFormComponent implements OnInit {
         from: this.from.value.code,
         amount: this.amount.value,
       });
-    });
+    }))
   }
   swapRates(): void {
     const temp = this.currencyConversionFrom.value.from;
@@ -155,5 +158,9 @@ export class CurrencyExchangerFormComponent implements OnInit {
       '=' +
       this.currencyConversionResult?.info?.quote.toFixed(2) +
       this.currencyConversionResult?.query?.to;}
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe()
   }
 }
