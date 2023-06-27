@@ -14,7 +14,7 @@
     [currencyExchangeDetails]="currencyExchangeDetails"
   ></app-currency-exchanger-form>
 
-  <div class="chart">
+  <div class="chart" *ngIf="currVal.length">
     <canvas
       baseChart
       width="790"

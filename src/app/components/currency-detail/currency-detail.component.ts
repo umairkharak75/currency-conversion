@@ -17,6 +17,7 @@ export class CurrencyDetailComponent {
   // eslint-disable-next-line @typescript-eslint/ban-types
   lastYearData!: Object;
   graphDates: any = [];
+  currVal:number[]=[]
   currencyExchangeDetails!: ICurrencyConversionDetail;
 
   public lineChartOptions: ChartOptions<'line'> = {
@@ -42,7 +43,8 @@ export class CurrencyDetailComponent {
                 currency2:this.currencyExchangeDetails.to.code
                  }
         this.currencyConversion.addRecentUsedCurrencies(obj)
-
+        this.currVal=[]
+        this.graphDates=[]
         this.getLastYearRates();
       });
   }
@@ -81,8 +83,8 @@ export class CurrencyDetailComponent {
           this.graphDates.push(result);
         });
         this.hasLoader=false
-        const values = this.graphDates.map((obj:any) => Object.values(obj)[1]);
-        this.initializeChart(values);
+         this.currVal = this.graphDates.map((obj:any) => Object.values(obj)[1]);
+        this.initializeChart(this.currVal);
 
       });
   }
