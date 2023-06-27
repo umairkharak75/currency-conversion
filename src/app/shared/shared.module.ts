@@ -9,12 +9,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { NgChartsModule } from 'ng2-charts';
-import { TestComponent } from './components/test/test.component';
-
+import { SpinnerComponent } from './components/spinner/spinner.component';
+ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 
 @NgModule({
-  declarations: [CurrencyExchangerFormComponent, TestComponent],
+  declarations: [CurrencyExchangerFormComponent, SpinnerComponent],
   imports: [
     CommonModule,
     MatInputModule,
@@ -25,6 +25,8 @@ import { TestComponent } from './components/test/test.component';
     MatToolbarModule,
     MatIconModule,
     NgChartsModule,
+    MatProgressSpinnerModule
+
   ],
 
   exports:[CurrencyExchangerFormComponent,
@@ -35,7 +37,7 @@ import { TestComponent } from './components/test/test.component';
     ReactiveFormsModule,
     MatToolbarModule,
     MatIconModule,
-    NgChartsModule,
-    TestComponent]
+    SpinnerComponent,
+    NgChartsModule]
 })
 export class SharedModule { }

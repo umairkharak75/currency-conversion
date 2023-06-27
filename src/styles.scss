@@ -44,28 +44,26 @@ body {
 
 
 
-.header {
-  position: relative;
-
-  &__logo-box {
-    position: absolute;
-    top: 20px;
-    left: 40px;
-  }
-  &__img {
-    height: 35px;
-  }
-  &__detail-box {
-    position: absolute;
-    left: 70%;
-    top: 10px;
-  }
-  &__detail-button {
-    margin: 10px 20px;
-    display: inline-block;
-    text-align: center;
-  }
+.header-container{
+  display: flex;
+  justify-content: space-between;
 }
+.header-item-logo{
+  height: 35px;
+
+}
+
+.header-currency-button-container{
+    display: flex;
+    flex:1;
+    align-items: end;
+justify-content: end;}
+
+.header__detail-button{
+  margin-right: 26px;
+
+}
+
 
 
 //home component start//

@@ -1,14 +1,23 @@
-<mat-toolbar class="header">
-  <div class="header__logo-box">
-      <img src="../../../assets/logo-green-1x.png"  class="header__img"alt="">
-  </div>
-  <div class="header__detail-box">
-    <button class="header__detail-button" mat-raised-button  (click)="goToDeatilPage('EUR','USD')" >
-      EUR-USD Details
-    </button>
-    <button (click)="goToDeatilPage('EUR','GBP')" class="header__detail-button" mat-raised-button  >
-      EUR-GBP Details
-    </button>
-  </div>
+  <mat-toolbar class="header-container">
 
-</mat-toolbar>
+        <img (click)="navigateTohome()" src="../../../assets/logo-green-1x.png" class="header-item-logo"alt="">
+
+    <div class="header-currency-button-container" >
+      <ng-container  *ngFor="let curr of frequentUseCurrencies">
+        <button (click)="goToDeatilPage(curr.currency1,curr.currency2)" class="header__detail-button" mat-raised-button  >
+          {{curr.currency1}}-{{curr.currency2}} Details
+        </button>
+
+      </ng-container>
+
+    </div>
+
+  </mat-toolbar>
+
+
+
+
+
+   <!--
+
+ -->

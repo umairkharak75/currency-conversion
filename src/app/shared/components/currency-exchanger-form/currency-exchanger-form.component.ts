@@ -2,6 +2,7 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnChanges,
   OnDestroy,
   OnInit,
   Output,
@@ -29,7 +30,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./currency-exchanger-form.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class CurrencyExchangerFormComponent implements OnInit ,OnDestroy{
+export class CurrencyExchangerFormComponent implements OnInit ,OnDestroy,OnChanges{
   currenciyList: ICurrency[] = [];
   title = 'currency-convertor';
   subscription: Subscription=new Subscription()
@@ -49,6 +50,7 @@ export class CurrencyExchangerFormComponent implements OnInit ,OnDestroy{
     public fb: FormBuilder,
     public router: Router
   ) {
+
     if (!this.currencyConvertor.getCurrencyListFromLocalStorage()) {
       this.subscription.add(this.currencyConvertor
         .fetchCurrenciesList(URL.fetchCurrencyList)
@@ -66,28 +68,13 @@ export class CurrencyExchangerFormComponent implements OnInit ,OnDestroy{
     }
   }
 
+  ngOnChanges(){
+    this.quotationResult=''
+    this.currencyExchangeFormInitializer()
+  }
+
   ngOnInit(): void {
-    if (this.currencyExchangeDetails) {
-      this.currencyConversionResult =
-        this.currencyExchangeDetails?.currencyConversionResult||'';
-    }
-    this.currencyConversionFrom = this.fb.group({
-      to: [this.currencyExchangeDetails?.to || '', Validators.required],
-      from: [this.currencyExchangeDetails?.from || '', Validators.required],
-      amount: [this.currencyConversionResult?.query?.amount || ''],
-    });
-    if (this.currencyExchangeDetails) {
-      this.calculateQuotation();
-
-      this.from.disable();
-    } else {
-      this.from.disable();
-      this.to.disable();
-    }
-
-    this.currencyConversionResult =
-      this.currencyExchangeDetails?.currencyConversionResult;
-
+    this.currencyExchangeFormInitializer()
     this.subscription.add(this.amount.valueChanges.subscribe((val) => {
       if (val) {
         if (this.currencyExchangeDetails) {
@@ -107,10 +94,32 @@ export class CurrencyExchangerFormComponent implements OnInit ,OnDestroy{
     return false;
   }
 
+  currencyExchangeFormInitializer(){
+    if (this.currencyExchangeDetails) {
+      this.currencyConversionResult =
+        this.currencyExchangeDetails?.currencyConversionResult||'';
+    }
+    this.currencyConversionFrom = this.fb.group({
+      to: [this.currencyExchangeDetails?.to || '', Validators.required],
+      from: [this.currencyExchangeDetails?.from || '', Validators.required],
+      amount: [this.currencyConversionResult?.query?.amount || ''],
+    });
+    if (this.currencyExchangeDetails) {
+      this.calculateQuotation();
+
+      this.from.disable();
+    } else {
+      this.from.disable();
+      this.to.disable();
+    }
+     this.currencyConversionResult =
+      this.currencyExchangeDetails?.currencyConversionResult;
+  }
   calcualteRates(): void {
+
     const url = URL.convertCurrency(
       this.currencyConversionFrom.value.to.code,
-      this.currencyConversionFrom.value.from.code,
+      this.from.value.code,
       this.currencyConversionFrom.value.amount
     );
     this.subscription.add(this.currencyConvertor.convertRateCurrency(url).subscribe((response) => {
@@ -140,7 +149,7 @@ export class CurrencyExchangerFormComponent implements OnInit ,OnDestroy{
       from: this.from.value,
       to: this.to.value,
     };
-    this.router.navigateByUrl('/detail', { state: currencyDetail });
+    this.router.navigateByUrl(`/detail/${this.from.value.code}${this.to.value.code}`, { state: currencyDetail });
   }
   get from(): FormControl {
     return this.currencyConversionFrom.get('from') as FormControl;

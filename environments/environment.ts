@@ -4,7 +4,9 @@
 
 export const environment = {
 	production: false,
-  apiUrl:'https://api.apilayer.com/'
+  apiUrl:'https://api.apilayer.com/',
+  apiKey:'RCncZFKaYXqOiwIdFTZw4UQn4CIY2Guu'
+
 };
 
 /*

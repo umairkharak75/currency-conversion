@@ -6,7 +6,7 @@ import * as moment from 'moment';
 import { map } from 'rxjs';
 import { CurrencyConversionService } from 'src/app/services/currency-conversion.service';
 import { DATES, MONTH_LABELS } from 'src/app/shared/constant/constant';
-import { ICurrencyConversionDetail } from 'src/app/shared/models/currency';
+import { ICurrencyConversionDetail, IRecentCurriencis } from 'src/app/shared/models/currency';
 
 @Component({
   selector: 'app-currency-detail',
@@ -22,6 +22,7 @@ export class CurrencyDetailComponent {
   public lineChartOptions: ChartOptions<'line'> = {
     responsive: false,
   };
+  hasLoader=false
   public lineChartLegend = true;
 
   public lineChartData!: ChartConfiguration<'line'>['data'];
@@ -37,6 +38,11 @@ export class CurrencyDetailComponent {
       .pipe(map(() => window.history.state))
       .subscribe((res) => {
         this.currencyExchangeDetails = res;
+        const obj:IRecentCurriencis={currency1:this.currencyExchangeDetails.from.code,
+                currency2:this.currencyExchangeDetails.to.code
+                 }
+        this.currencyConversion.addRecentUsedCurrencies(obj)
+
         this.getLastYearRates();
       });
   }
@@ -52,6 +58,8 @@ export class CurrencyDetailComponent {
   }
 
   getLastYearRates() {
+    this.hasLoader=true
+
     this.currencyConversion
       .getLastYearRates(
         DATES.startData,
@@ -60,6 +68,7 @@ export class CurrencyDetailComponent {
         this.currencyExchangeDetails.to.code
       )
       .subscribe((data) => {
+
         this.lastYearData = data.quotes;
         const quotesArray = Object.entries(this.lastYearData).map(
           ([date, rates]) => ({
@@ -71,10 +80,10 @@ export class CurrencyDetailComponent {
           const result = this.findObjectByDate(quotesArray, element);
           this.graphDates.push(result);
         });
+        this.hasLoader=false
         const values = this.graphDates.map((obj:any) => Object.values(obj)[1]);
-
-
         this.initializeChart(values);
+
       });
   }
   findObjectByDate(quotesArray: any, targetDate: string) {

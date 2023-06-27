@@ -1,15 +1,29 @@
-<div  class="btn-back-home">
-  <button mat-raised-button color="primary" (click)="navigateTohome()">BackToHome</button>
-</div>
+<app-spinner *ngIf="hasLoader"></app-spinner>
+<ng-container *ngIf="!hasLoader">
+  <div class="btn-back-home">
+    <button mat-raised-button color="primary" (click)="navigateTohome()">
+      BackToHome
+    </button>
+  </div>
 
-<h1>{{currencyExchangeDetails.from.code}} - {{currencyExchangeDetails.from.name}}</h1>
-<app-currency-exchanger-form [currencyExchangeDetails]="currencyExchangeDetails"></app-currency-exchanger-form>
+  <h1>
+    {{ currencyExchangeDetails?.from?.code }} -
+    {{ currencyExchangeDetails?.from?.name }}
+  </h1>
+  <app-currency-exchanger-form
+    [currencyExchangeDetails]="currencyExchangeDetails"
+  ></app-currency-exchanger-form>
 
-<div class="chart">
-  <canvas baseChart width="790" height="400"
-    [type]="'line'"
-    [data]="lineChartData"
-    [options]="lineChartOptions"
-    [legend]="lineChartLegend">
-  </canvas>
-</div>
+  <div class="chart">
+    <canvas
+      baseChart
+      width="790"
+      height="400"
+      [type]="'line'"
+      [data]="lineChartData"
+      [options]="lineChartOptions"
+      [legend]="lineChartLegend"
+    >
+    </canvas>
+  </div>
+</ng-container>
