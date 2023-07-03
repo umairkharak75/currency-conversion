@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpService } from './http.service';
 import { Observable, Subject, map } from 'rxjs';
 import { combineLatest } from 'rxjs';
-import { ICurrency, ICurrencyConversion, ICurrencyResponse, IExchangeRateResponse } from '../shared/models/currency';
+import { ICurrency, ICurrencyConversion, ICurrencyResponse, IExchangeRateResponse, IRecentCurriencis } from '../shared/models/currency';
 import { URL } from '../shared/constant/constant';
 
 @Injectable({
@@ -12,7 +12,7 @@ import { URL } from '../shared/constant/constant';
 
 export class CurrencyConversionService {
 
-  frequentCurrency:Subject<any>=new Subject()
+  frequentCurrency:Subject<IRecentCurriencis[]>=new Subject()
 
   fetchCurrenciesList(url:string):Observable <ICurrency[]>{
     return this.httpService.get<ICurrencyResponse>(url).pipe(

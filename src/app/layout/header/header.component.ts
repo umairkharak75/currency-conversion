@@ -30,7 +30,6 @@ export class HeaderComponent {
     this.currencyList= this.currencyConversion.getCurrencyListFromLocalStorage()
 
     const currencyDetail = {
-
       from: this.currencyList.filter((curr:ICurrency)=> curr.code===fromC)[0],
       to: this.currencyList.filter((curr:ICurrency)=> curr.code===toC)[0]
     };

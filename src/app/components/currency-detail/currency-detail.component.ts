@@ -18,7 +18,7 @@ export class CurrencyDetailComponent {
   lastYearData!: Object;
   graphDates: any = [];
   currVal:number[]=[]
-  currencyExchangeDetails!: ICurrencyConversionDetail;
+  currencyExchangeDetails: ICurrencyConversionDetail | undefined;
 
   public lineChartOptions: ChartOptions<'line'> = {
     responsive: false,
@@ -39,8 +39,8 @@ export class CurrencyDetailComponent {
       .pipe(map(() => window.history.state))
       .subscribe((res) => {
         this.currencyExchangeDetails = res;
-        const obj:IRecentCurriencis={currency1:this.currencyExchangeDetails.from.code,
-                currency2:this.currencyExchangeDetails.to.code
+        const obj:IRecentCurriencis={currency1:this.currencyExchangeDetails?.from.code as string,
+                currency2:this.currencyExchangeDetails?.to.code as string
                  }
         this.currencyConversion.addRecentUsedCurrencies(obj)
         this.currVal=[]
@@ -66,8 +66,8 @@ export class CurrencyDetailComponent {
       .getLastYearRates(
         DATES.startData,
         DATES.endDate,
-        this.currencyExchangeDetails.from.code,
-        this.currencyExchangeDetails.to.code
+        this.currencyExchangeDetails?.from.code as string,
+        this.currencyExchangeDetails?.to.code as string
       )
       .subscribe((data) => {
 

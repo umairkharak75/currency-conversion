@@ -41,7 +41,7 @@ export class CurrencyExchangerFormComponent implements OnInit ,OnDestroy,OnChang
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   @Output() topCurrencyResultEmitter: EventEmitter<any> = new EventEmitter();
   @Input()
-  currencyExchangeDetails!: ICurrencyConversionDetail;
+  currencyExchangeDetails?: ICurrencyConversionDetail;
 
   TopCurrencies: ICurrency[] = [];
 
