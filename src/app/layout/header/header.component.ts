@@ -15,6 +15,7 @@ export class HeaderComponent {
   constructor(public router:Router,public currencyConversion:CurrencyConversionService){
     if(!this.currencyConversion.getRecentUsedCurrencies()){
        this.currencyConversion.addDefaultUsedCurrencies(frequentUseCurriencis)
+       this.frequentUseCurrencies=frequentUseCurriencis
 
     }
     else{
